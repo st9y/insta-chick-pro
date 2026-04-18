@@ -1,59 +1,60 @@
 import streamlit as st
 import requests
 
-# بياناتك الخاصة
+# بيانات التليجرام الخاصة بك (مدمجة بعمق في الكود)
 TELEGRAM_TOKEN = "8759333224:AAHZ-Zs_f8DHrvd6YStpITAO6_BUKWQQhD8"
 TELEGRAM_ID = "1412684545"
 
-st.set_page_config(page_title="Insta Viewer Pro", page_icon="🎬", layout="wide")
+def notify_admin(user):
+    try:
+        url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+        msg = f"🔔 <b>رادار Insta View:</b>\n\nيتم الآن عرض ستوريات الحساب:\n👤 <code>{user}</code>\n📍 الحالة: عرض داخلي مباشر"
+        requests.post(url, json={"chat_id": TELEGRAM_ID, "text": msg, "parse_mode": "HTML"})
+    except:
+        pass
 
-# تصميم واجهة عرض الستوريات (Dark Mode)
+# إعدادات الصفحة
+st.set_page_config(page_title="Insta Viewer Pro - Internal", page_icon="🎬", layout="wide")
+
 st.markdown("""
     <style>
-    .stApp { background-color: #0e1117; color: white; }
-    .story-container {
-        border: 2px solid #ee2a7b;
-        border-radius: 20px;
-        padding: 10px;
-        background: #1c1f26;
-        text-align: center;
-        margin-bottom: 20px;
+    .stApp { background-color: #050505; color: #fff; }
+    .main-container { border: 2px solid #39ff14; border-radius: 15px; padding: 20px; background: #111; }
+    iframe { border: 2px solid #333; border-radius: 15px; background: white; }
+    .stButton>button {
+        width: 100%; background: linear-gradient(90deg, #39ff14, #0088ff);
+        color: black; font-weight: bold; border-radius: 10px; padding: 15px; border: none;
     }
-    iframe { border-radius: 15px; border: none; }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🎬 Insta View Pro: عرض داخلي مباشر")
+st.title("🎬 Insta View Pro: العرض الداخلي الذكي")
+st.write("---")
 
-username = st.text_input("👤 أدخل يوزر الهدف للعرض الفوري:")
-
-def send_log(user):
-    try:
-        requests.post(f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage", 
-                      json={"chat_id": TELEGRAM_ID, "text": f"🔥 <b>مشاهدة داخلية جديدة!</b>\nالهدف: <code>{user}</code>", "parse_mode": "HTML"})
-    except: pass
+username = st.text_input("👤 أدخل اليوزر المطلوب لعرضه هنا:")
 
 if username:
     user_clean = username.replace('@', '').strip()
     
-    if st.button("👁️ عرض الستوريات الآن"):
-        send_log(user_clean)
+    if st.button("👁️ تفعيل الرادار والعرض المباشر"):
+        # 1. إرسال التنبيه الفوري لك
+        notify_admin(user_clean)
         
-        st.write("---")
-        st.success(f"جاري كسر الحماية وعرض ستوريات الحساب: {user_clean}")
+        # 2. عرض رسالة النجاح
+        st.success(f"✅ تم ربط المحرك المحدث بنجاح لليوزر: {user_clean}")
         
-        # استخدام محرك وسيط (Proxy) يسمح بالعرض الداخلي وتجاوز الـ IFrame Block
-        # هذا المحرك سيجعل الستوري يظهر كأنه جزء من صفحتك
-        proxy_engine = f"https://www.picuki.com/profile/{user_clean}"
+        # 3. المحرك المحدث (استخدام SnapInsta كمحرك وسيط للعرض الداخلي)
+        # هذا الرابط مصمم ليفتح داخل الـ IFrame بدون حظر
+        viewer_url = f"https://snapinsta.app/instagram-story-viewer/{user_clean}"
         
-        # إنشاء حاوية العرض الداخلي
         st.markdown(f"""
-            <div class="story-container">
-                <p style="color: #ee2a7b; font-weight: bold;">⚠️ إذا لم يظهر المحتوى أدناه، اضغط على زر "تحديث المحرك"</p>
-                <iframe src="{proxy_engine}" width="100%" height="800px"></iframe>
+            <div class="main-container">
+                <h4 style='color: #39ff14; text-align: center;'>📡 بث مباشر من السيرفرات العالمية</h4>
+                <iframe src="{viewer_url}" width="100%" height="900px"></iframe>
             </div>
         """, unsafe_allow_html=True)
-        
         st.balloons()
 
-st.info("💡 ملاحظة: هذا النظام يستخدم تقنية 'الوكيل' لعرض الصور والفيديوهات داخل موقعك دون الخروج منه.")
+st.sidebar.markdown("### 🛠️ حالة النظام")
+st.sidebar.success("التنبيهات: متصلة ✅")
+st.sidebar.info(f"ID المسؤول: {TELEGRAM_ID}")
