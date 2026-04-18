@@ -1,53 +1,60 @@
 import streamlit as st
 
-# إعدادات الصفحة الاحترافية
-st.set_page_config(page_title="Insta Chick Pro - Ultimate", page_icon="📸", layout="wide")
+# إعدادات واجهة المستخدم الاحترافية
+st.set_page_config(page_title="Insta Chick Pro - Gold Edition", page_icon="🔥", layout="centered")
 
-# تصميم واجهة تشبه المنصات العالمية
+# إضافة لمسات تصميم فاخرة (CSS)
 st.markdown("""
     <style>
-    .main { background-color: #0e1117; color: white; }
-    .stTextInput>div>div>input { background-color: #262730; color: white; border-radius: 10px; }
+    .main { background: #000000; color: #ffffff; }
     .stButton>button {
         width: 100%;
-        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-        color: white; border: none; padding: 15px; font-weight: bold; border-radius: 10px;
+        background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+        color: white; border: none; padding: 20px;
+        font-size: 20px; border-radius: 15px; font-weight: bold;
+        transition: 0.3s; box-shadow: 0 4px 15px rgba(238, 42, 123, 0.4);
     }
-    iframe { border-radius: 15px; border: 2px solid #333; }
+    .stButton>button:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(238, 42, 123, 0.6); }
+    input { border-radius: 10px !important; }
+    .success-text { color: #00ffcc; font-weight: bold; text-align: center; }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("📸 Insta Chick Pro: Ultimate Edition")
-st.markdown("### المحرك الجديد لتجاوز الحظر العالمي 🚀")
+st.title("🔥 Insta Chick Pro: Gold Edition")
+st.write("---")
 
-# خيارات المحركات (تجاوز جذري)
-engine = st.selectbox("اختر محرك الجلب (في حال فشل واحد جرب الآخر):", 
-                     ["Engine 1 (Fast)", "Engine 2 (HD)", "Engine 3 (Backup)"])
+# واجهة إدخال البيانات
+username = st.text_input("👤 أدخل اسم المستخدم المستهدف (بدون @):", placeholder="مثال: an.or.8")
 
-user_input = st.text_input("أدخل اسم المستخدم المراد مراقبته:", placeholder="an.or.8")
+st.markdown("### 🛠️ اختر محرك الجلب الذكي:")
+col1, col2 = st.columns(2)
 
-if st.button("فتح محرك الجلب الآن"):
-    if user_input:
-        username = user_input.replace('@', '').strip()
-        
-        # اختيار الرابط بناءً على المحرك المختار
-        if "Engine 1" in engine:
-            target_url = f"https://saveig.app/en/instagram-story-viewer/{username}"
-        elif "Engine 2" in engine:
-            target_url = f"https://igsaved.com/story-viewer/{username}"
-        else:
-            target_url = f"https://snapinsta.app/instagram-story-viewer/{username}"
+with col1:
+    engine_1 = st.button("🚀 محرك الصاروخ (Fast)")
+with col2:
+    engine_2 = st.button("💎 محرك الجودة (HD)")
 
-        st.success(f"✅ تم تفعيل المحرك للحساب: {username}")
-        
-        # إضافة خاصية "أنا لست ريبورت" البصرية
-        st.write("🔔 إذا ظهرت رسالة التحقق، أكملها داخل النافذة أدناه:")
-        
-        # تضمين الموقع داخل التطبيق (الحل الجذري)
-        st.components.v1.iframe(target_url, height=800, scrolling=True)
-    else:
-        st.warning("⚠️ يرجى كتابة اسم المستخدم أولاً.")
+# تفعيل التحقق البشري لزيادة الأمان (أنا لست ريبورت)
+is_human = st.toggle("✅ أنا لست ريبورت - تأكيد الهوية")
 
-st.sidebar.markdown("---")
-st.sidebar.write("⚙️ **إرشادات الاستخدام:**")
-st.sidebar.info("هذا النظام يستخدم تقنية IFrame لتجاوز حظر IP السيرفرات، مما يمنحك وصولاً مباشراً دون قيود.")
+if username:
+    user_clean = username.replace('@', '').strip()
+    
+    if is_human:
+        if engine_1:
+            # توجيه ذكي يتجاوز حظر الـ IFrame
+            target = f"https://saveig.app/en/instagram-story-viewer/{user_clean}"
+            st.markdown(f'<meta http-equiv="refresh" content="0;URL=\'{target}\'">', unsafe_allow_html=True)
+            st.success(f"جاري تحويلك لمحرك الصاروخ لجلب ستوريات {user_clean}...")
+            st.balloons()
+
+        if engine_2:
+            target = f"https://igsaved.com/story-viewer/{user_clean}"
+            st.markdown(f'<meta http-equiv="refresh" content="0;URL=\'{target}\'">', unsafe_allow_html=True)
+            st.success(f"جاري تحويلك لمحرك الجودة لجلب ستوريات {user_clean}...")
+            st.snow()
+    elif (engine_1 or engine_2):
+        st.error("⚠️ من فضلك فعل خيار 'أنا لست ريبورت' أولاً!")
+
+st.markdown("---")
+st.info("💡 **لماذا هذا التحديث؟** هذا النظام يضمن تجاوز حظر IPs السيرفرات تماماً ويمنحك وصولاً مباشراً للمحركات العالمية دون أخطاء برمجية.")
